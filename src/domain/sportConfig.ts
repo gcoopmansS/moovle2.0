@@ -28,7 +28,6 @@ export interface SportConfiguration {
   name: string;
   displayName: string;
   // Sport selection metadata
-  description: string;
   icon: string; // Icon component name
   color: {
     primary: string; // e.g., "blue", "green"
@@ -37,7 +36,6 @@ export interface SportConfiguration {
     iconBg: string; // e.g., "blue-100", "green-100"
     iconColor: string; // e.g., "blue-600", "green-600"
   };
-  highlights: string[]; // Key features to display
   fields: {
     title: SportFieldConfig;
     location: SportFieldConfig;
@@ -53,7 +51,6 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
   tennis: {
     name: "tennis",
     displayName: "Tennis",
-    description: "Singles or doubles matches on tennis courts",
     icon: "TennisIcon",
     color: {
       primary: "blue",
@@ -62,11 +59,6 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       iconBg: "blue-100",
       iconColor: "blue-600",
     },
-    highlights: [
-      "Duration: Usually 90 minutes",
-      "Players: 2-4 people",
-      "Various skill levels",
-    ],
     fields: {
       title: {
         required: true,
@@ -130,7 +122,6 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
   padel: {
     name: "padel",
     displayName: "Padel",
-    description: "Doubles matches on enclosed padel courts",
     icon: "PadelIcon",
     color: {
       primary: "green",
@@ -139,11 +130,6 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       iconBg: "green-100",
       iconColor: "green-600",
     },
-    highlights: [
-      "Duration: Usually 60 minutes",
-      "Players: Always 4 people (2v2)",
-      "Equipment options available",
-    ],
     fields: {
       title: {
         required: true,

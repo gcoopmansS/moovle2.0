@@ -159,16 +159,16 @@ export function CreateActivityModal({
           {step === "sport-selection" ? (
             // Step 1: Sport Selection
             <div className="space-y-6">
-              <div className="text-center mb-8">
-                <h3 className="text-lg font-semibold text-gray-900 mb-2">
-                  What sport do you want to play?
+              <div className="text-center mb-10">
+                <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                  Choose Your Sport
                 </h3>
-                <p className="text-gray-600">
-                  Choose your sport to get a customized activity form
+                <p className="text-gray-600 text-lg">
+                  Select a sport to create your activity
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {getAllSports().map(([sportKey, sportConfig]) => {
                   const IconComponent =
                     SPORT_ICONS[sportConfig.icon as keyof typeof SPORT_ICONS];
@@ -178,38 +178,23 @@ export function CreateActivityModal({
                     <button
                       key={sportKey}
                       onClick={() => handleSportSelection(sportKey)}
-                      className={`p-6 border-2 border-gray-200 hover:border-${colors.hover} hover:bg-${colors.background} transition-all duration-200 text-left group`}
+                      className={`group relative p-6 border-2 border-gray-200 hover:border-${colors.hover} hover:shadow-lg hover:shadow-${colors.background} transition-all duration-300 transform hover:-translate-y-1 bg-white cursor-pointer`}
                     >
-                      <div className="flex items-center space-x-4">
+                      {/* Icon Container */}
+                      <div className="flex flex-col items-center space-y-3">
                         <div
-                          className={`p-3 bg-${
-                            colors.iconBg
-                          } group-hover:bg-${colors.iconBg.replace(
-                            "100",
-                            "200"
-                          )} transition-colors`}
+                          className={`p-4 bg-${colors.iconBg} group-hover:bg-${colors.iconColor} group-hover:scale-110 transition-all duration-300`}
                         >
                           <IconComponent
-                            className={`w-8 h-8 text-${colors.iconColor}`}
+                            className={`w-8 h-8 text-${colors.iconColor} group-hover:text-white transition-colors duration-300`}
                           />
                         </div>
-                        <div>
-                          <h4 className="text-xl font-semibold text-gray-900 mb-1">
+
+                        {/* Sport Name */}
+                        <div className="text-center">
+                          <h3 className="font-semibold text-gray-900 group-hover:text-gray-800 transition-colors">
                             {sportConfig.displayName}
-                          </h4>
-                          <p className="text-gray-600 text-sm">
-                            {sportConfig.description}
-                          </p>
-                          <div className="mt-2 text-xs text-gray-500">
-                            {sportConfig.highlights.map((highlight, index) => (
-                              <span key={index}>
-                                • {highlight}
-                                {index < sportConfig.highlights.length - 1
-                                  ? " "
-                                  : ""}
-                              </span>
-                            ))}
-                          </div>
+                          </h3>
                         </div>
                       </div>
                     </button>
