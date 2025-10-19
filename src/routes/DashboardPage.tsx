@@ -183,7 +183,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
   );
 }
 
-export default function FeedPage() {
+export default function DashboardPage() {
   // Filter activities by type for discovery feed
   const matesActivities = mockActivities.filter(
     (activity) => activity.privacy === "MATES"
@@ -195,11 +195,9 @@ export default function FeedPage() {
 
   return (
     <div>
-      {/* Feed Header */}
+      {/* Dashboard Header */}
       <div className="mb-6">
-        <h1 className="text-2xl font-semibold text-gray-900 mb-1">
-          Activity Feed
-        </h1>
+        <h1 className="text-2xl font-semibold text-gray-900 mb-1">Dashboard</h1>
         <p className="text-gray-500">
           Your activities and discover what's happening around you
         </p>
