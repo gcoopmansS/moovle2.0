@@ -54,10 +54,10 @@ export function CreateActivityModal({
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white shadow-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-gray-200">
         {/* Modal Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
               Create Activity
@@ -68,7 +68,7 @@ export function CreateActivityModal({
           </div>
           <button
             onClick={onClose}
-            className="text-gray-400 hover:text-gray-600 transition-colors"
+            className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
           >
             <svg
               className="w-6 h-6"
@@ -100,7 +100,7 @@ export function CreateActivityModal({
                 value={formData.title}
                 onChange={handleInputChange}
                 placeholder="e.g., Morning Tennis Session"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
                 required
               />
             </div>
@@ -115,7 +115,7 @@ export function CreateActivityModal({
                   name="sport"
                   value={formData.sport}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
                   required
                 >
                   <option value="">Select sport</option>
@@ -137,7 +137,7 @@ export function CreateActivityModal({
                   name="privacy"
                   value={formData.privacy}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
                 >
                   <option value="PUBLIC">🌍 Public</option>
                   <option value="MATES">👥 Mates Only</option>
@@ -157,7 +157,7 @@ export function CreateActivityModal({
                   name="date"
                   value={formData.date}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
                   required
                 />
               </div>
@@ -171,7 +171,7 @@ export function CreateActivityModal({
                   name="time"
                   value={formData.time}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
                   required
                 />
               </div>
@@ -188,7 +188,7 @@ export function CreateActivityModal({
                 value={formData.location}
                 onChange={handleInputChange}
                 placeholder="e.g., Central Park Tennis Courts"
-                className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
                 required
               />
             </div>
@@ -207,7 +207,7 @@ export function CreateActivityModal({
                   placeholder="90"
                   min="15"
                   max="480"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
                   required
                 />
               </div>
@@ -224,7 +224,7 @@ export function CreateActivityModal({
                   placeholder="4"
                   min="2"
                   max="50"
-                  className="w-full px-4 py-3 rounded-xl border border-gray-200 bg-white focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all duration-200"
+                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
                   required
                 />
               </div>
@@ -238,25 +238,25 @@ export function CreateActivityModal({
                 name="autoAccept"
                 checked={formData.autoAccept}
                 onChange={handleInputChange}
-                className="w-4 h-4 text-blue-600 bg-white border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                className="w-4 h-4 text-gray-900 bg-white border-gray-300 focus:ring-gray-900 focus:ring-2 cursor-pointer"
               />
-              <label htmlFor="autoAccept" className="text-sm text-gray-900">
+              <label htmlFor="autoAccept" className="text-sm text-gray-900 cursor-pointer">
                 Automatically accept join requests
               </label>
             </div>
 
             {/* Action Buttons */}
-            <div className="flex justify-end space-x-3 pt-4 border-t border-gray-100">
+            <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
               <button
                 type="button"
                 onClick={onClose}
-                className="px-6 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 rounded-xl font-medium transition-all duration-200"
+                className="px-6 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium transition-colors cursor-pointer"
               >
                 Cancel
               </button>
               <button
                 type="submit"
-                className="bg-gradient-to-r from-blue-600 to-blue-700 text-white px-6 py-3 rounded-xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02] shadow-sm"
+                className="bg-gray-900 text-white px-6 py-3 font-medium hover:bg-gray-800 transition-colors cursor-pointer"
               >
                 Create Activity
               </button>
@@ -264,9 +264,9 @@ export function CreateActivityModal({
           </form>
 
           {/* Tips */}
-          <div className="mt-6 bg-blue-50 rounded-2xl border border-blue-100 p-4">
+          <div className="mt-6 bg-gray-50 border border-gray-200 p-4">
             <div className="flex items-start space-x-3">
-              <div className="text-blue-600 text-lg">💡</div>
+              <div className="text-gray-600 text-lg">💡</div>
               <div>
                 <h4 className="font-medium text-gray-900 mb-1">
                   Tips for great activities

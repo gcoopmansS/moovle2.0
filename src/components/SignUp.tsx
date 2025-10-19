@@ -48,14 +48,14 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
   };
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
-      <div className="bg-white/90 backdrop-blur-md rounded-3xl p-8 w-full max-w-md mx-4 shadow-2xl border border-white/20">
+    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+      <div className="bg-white p-8 w-full max-w-md mx-4 shadow-lg border border-gray-200">
         <div className="flex justify-between items-center mb-6">
           <h2 className="text-2xl font-bold text-gray-900">Join Moovle</h2>
           {onClose && (
             <button
               onClick={onClose}
-              className="text-gray-400 hover:text-gray-600 transition-colors"
+              className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
             >
               <svg
                 className="w-6 h-6"
@@ -89,7 +89,7 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
               value={formData.name}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-white/70 backdrop-blur-sm"
+              className="w-full px-4 py-3 border border-gray-200 focus:border-gray-900 focus:outline-none transition-colors bg-white"
               placeholder="Enter your full name"
             />
           </div>
@@ -108,7 +108,7 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
               value={formData.email}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-white/70 backdrop-blur-sm"
+              className="w-full px-4 py-3 border border-gray-200 focus:border-gray-900 focus:outline-none transition-colors bg-white"
               placeholder="Enter your email"
             />
           </div>
@@ -127,7 +127,7 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
               value={formData.password}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-white/70 backdrop-blur-sm"
+              className="w-full px-4 py-3 border border-gray-200 focus:border-gray-900 focus:outline-none transition-colors bg-white"
               placeholder="Create a password"
             />
           </div>
@@ -146,13 +146,13 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
               value={formData.confirmPassword}
               onChange={handleInputChange}
               required
-              className="w-full px-4 py-3 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all bg-white/70 backdrop-blur-sm"
+              className="w-full px-4 py-3 border border-gray-200 focus:border-gray-900 focus:outline-none transition-colors bg-white"
               placeholder="Confirm your password"
             />
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-3 text-red-700 text-sm">
+            <div className="bg-red-50 border border-red-200 p-3 text-red-700 text-sm">
               {error}
             </div>
           )}
@@ -160,7 +160,7 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full bg-gradient-to-r from-blue-600 to-blue-700 text-white py-3 px-6 rounded-2xl font-medium hover:from-blue-700 hover:to-blue-800 transition-all transform hover:scale-[1.02] disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="w-full bg-gray-900 text-white py-3 px-6 font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {isLoading ? "Creating Account..." : "Create Account"}
           </button>
@@ -171,7 +171,7 @@ export function SignUp({ onClose, onSwitchToLogin }: SignUpProps) {
             Already have an account?{" "}
             <button
               onClick={onSwitchToLogin}
-              className="text-blue-600 hover:text-blue-700 font-medium transition-colors"
+              className="text-gray-900 hover:text-gray-700 font-medium transition-colors cursor-pointer"
             >
               Sign in
             </button>
