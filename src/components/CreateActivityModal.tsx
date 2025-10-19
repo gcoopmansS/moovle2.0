@@ -119,13 +119,8 @@ export function CreateActivityModal({
                   required
                 >
                   <option value="">Select sport</option>
-                  <option value="tennis">🎾 Tennis</option>
-                  <option value="padel">🏓 Padel</option>
-                  <option value="running">🏃‍♂️ Running</option>
-                  <option value="cycling">🚴‍♂️ Cycling</option>
-                  <option value="walking">🚶‍♂️ Walking</option>
-                  <option value="gym">💪 Gym</option>
-                  <option value="other">⚽ Other</option>
+                  <option value="tennis">Tennis</option>
+                  <option value="padel">Padel</option>
                 </select>
               </div>
 
@@ -240,7 +235,10 @@ export function CreateActivityModal({
                 onChange={handleInputChange}
                 className="w-4 h-4 text-gray-900 bg-white border-gray-300 focus:ring-gray-900 focus:ring-2 cursor-pointer"
               />
-              <label htmlFor="autoAccept" className="text-sm text-gray-900 cursor-pointer">
+              <label
+                htmlFor="autoAccept"
+                className="text-sm text-gray-900 cursor-pointer"
+              >
                 Automatically accept join requests
               </label>
             </div>

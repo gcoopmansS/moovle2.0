@@ -1,6 +1,14 @@
-import type { User } from "../domain/auth";
-
-export const mockUsers: User[] = [
+import type { User } from "../domain  {
+    id: "4",
+    email: "emma@example.com",
+    name: "Emma Davis",
+    avatar: "ED",
+    bio: "Tennis doubles specialist. Looking for consistent playing partners!",
+    location: "Amsterdam, Netherlands",
+    sports: ["tennis"],
+    joinedDate: "2024-02-05",
+    friendIds: ["1", "3", "5", "6"],
+  },port const mockUsers: User[] = [
   {
     id: "1",
     email: "gil@moovle.app",
@@ -38,7 +46,7 @@ export const mockUsers: User[] = [
     id: "4",
     email: "emma@example.com",
     name: "Emma Davis",
-    avatar: "ED",
+    avatar: "�",
     bio: "Tennis doubles specialist. Looking for consistent playing partners!",
     location: "Amsterdam, Netherlands",
     sports: ["tennis"],
@@ -49,7 +57,7 @@ export const mockUsers: User[] = [
     id: "5",
     email: "alex@example.com",
     name: "Alex Chen",
-    avatar: "AC",
+    avatar: "🏓",
     bio: "Beginner padel player, eager to learn and improve. Tennis background.",
     location: "Utrecht, Netherlands",
     sports: ["padel", "tennis"],
@@ -60,7 +68,7 @@ export const mockUsers: User[] = [
     id: "6",
     email: "lisa@example.com",
     name: "Lisa Rodriguez",
-    avatar: "LR",
+    avatar: "🎾",
     bio: "Competitive tennis player and padel enthusiast. Tournament regular!",
     location: "Rotterdam, Netherlands",
     sports: ["tennis", "padel"],
@@ -71,7 +79,7 @@ export const mockUsers: User[] = [
     id: "7",
     email: "maria@example.com",
     name: "Maria Garcia",
-    avatar: "MG",
+    avatar: "🏓",
     bio: "Padel instructor and former tennis pro. Love teaching and playing!",
     location: "Amsterdam, Netherlands",
     sports: ["padel", "tennis"],
@@ -82,7 +90,7 @@ export const mockUsers: User[] = [
     id: "8",
     email: "james@example.com",
     name: "James Wilson",
-    avatar: "JW",
+    avatar: "🎾",
     bio: "Social tennis and padel player. Prefer fun matches over competition!",
     location: "Amsterdam, Netherlands",
     sports: ["tennis", "padel"],

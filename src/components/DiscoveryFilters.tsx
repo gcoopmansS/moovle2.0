@@ -13,19 +13,7 @@ export interface FilterState {
   skillLevel: string;
 }
 
-const SPORTS_OPTIONS = [
-  "tennis",
-  "padel",
-  "running",
-  "cycling",
-  "gym",
-  "swimming",
-  "football",
-  "basketball",
-  "volleyball",
-  "badminton",
-  "squash",
-];
+const SPORTS_OPTIONS = ["tennis", "padel"];
 
 const LOCATIONS = [
   "Amsterdam, Netherlands",

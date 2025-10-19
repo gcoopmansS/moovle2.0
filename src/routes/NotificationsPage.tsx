@@ -1,3 +1,5 @@
+import { TennisIcon, WarningIcon } from "../components/icons";
+
 export default function NotificationsPage() {
   return (
     <div>
@@ -14,13 +16,13 @@ export default function NotificationsPage() {
       {/* Notifications List */}
       <div className="space-y-3 max-w-2xl">
         {/* Unread Notification - Join Request */}
-        <div className="bg-surface rounded-2xl shadow-sm border border-text-secondary/10 p-4 hover:shadow-md transition-all duration-200 relative">
+        <div className="bg-surface border border-text-secondary/10 p-4 hover:bg-surface/80 transition-colors duration-200 relative">
           {/* Unread indicator */}
-          <div className="absolute top-4 left-4 w-2 h-2 bg-primary rounded-full"></div>
+          <div className="absolute top-4 left-4 w-2 h-2 bg-primary"></div>
 
           <div className="flex items-start space-x-4 ml-6">
-            <div className="bg-primary/10 rounded-xl p-2 flex-shrink-0">
-              <span className="text-primary text-lg">🎾</span>
+            <div className="bg-primary/10 p-2 flex-shrink-0">
+              <TennisIcon className="w-5 h-5 text-primary" />
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-sm text-text-primary font-medium">
@@ -30,10 +32,10 @@ export default function NotificationsPage() {
               <p className="text-xs text-text-secondary mt-1">2 hours ago</p>
             </div>
             <div className="flex space-x-2 flex-shrink-0">
-              <button className="bg-success text-white px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-success/90 hover:-translate-y-0.5 transition-all duration-200">
+              <button className="bg-success text-white px-3 py-1.5 text-xs font-medium hover:bg-success/90 transition-colors duration-200">
                 Accept
               </button>
-              <button className="bg-text-secondary/10 text-text-secondary px-3 py-1.5 rounded-lg text-xs font-medium hover:bg-text-secondary/20 transition-all duration-200">
+              <button className="bg-text-secondary/10 text-text-secondary px-3 py-1.5 text-xs font-medium hover:bg-text-secondary/20 transition-colors duration-200">
                 Decline
               </button>
             </div>
@@ -41,15 +43,15 @@ export default function NotificationsPage() {
         </div>
 
         {/* Read Notification - Acceptance */}
-        <div className="bg-surface rounded-2xl shadow-sm border border-text-secondary/10 p-4 hover:shadow-md transition-all duration-200 opacity-75">
+        <div className="bg-surface border border-text-secondary/10 p-4 hover:bg-surface/80 transition-colors duration-200 opacity-75">
           <div className="flex items-start space-x-4">
-            <div className="bg-success/10 rounded-xl p-2 flex-shrink-0">
-              <span className="text-success text-lg">🏃‍♂️</span>
+            <div className="bg-success/10 p-2 flex-shrink-0">
+              <span className="text-success text-lg">�</span>
             </div>
             <div className="flex-1">
               <p className="text-sm text-text-primary">
                 You've been accepted to{" "}
-                <span className="font-medium">Weekend Running Group</span>
+                <span className="font-medium">Weekend Padel Session</span>
               </p>
               <p className="text-xs text-text-secondary mt-1">5 hours ago</p>
             </div>
@@ -57,10 +59,10 @@ export default function NotificationsPage() {
         </div>
 
         {/* Read Notification - Schedule Change */}
-        <div className="bg-surface rounded-2xl shadow-sm border border-text-secondary/10 p-4 hover:shadow-md transition-all duration-200 opacity-75">
+        <div className="bg-surface border border-text-secondary/10 p-4 hover:bg-surface/80 transition-colors duration-200 opacity-75">
           <div className="flex items-start space-x-4">
-            <div className="bg-warning/10 rounded-xl p-2 flex-shrink-0">
-              <span className="text-warning text-lg">⚠️</span>
+            <div className="bg-warning/10 p-2 flex-shrink-0">
+              <WarningIcon className="w-5 h-5 text-warning" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-text-primary">
@@ -73,15 +75,15 @@ export default function NotificationsPage() {
         </div>
 
         {/* Read Notification - New Activity */}
-        <div className="bg-surface rounded-2xl shadow-sm border border-text-secondary/10 p-4 hover:shadow-md transition-all duration-200 opacity-75">
+        <div className="bg-surface border border-text-secondary/10 p-4 hover:bg-surface/80 transition-colors duration-200 opacity-75">
           <div className="flex items-start space-x-4">
-            <div className="bg-secondary/10 rounded-xl p-2 flex-shrink-0">
-              <span className="text-secondary text-lg">🚴‍♂️</span>
+            <div className="bg-secondary/10 p-2 flex-shrink-0">
+              <TennisIcon className="w-5 h-5 text-secondary" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-text-primary">
                 <span className="font-medium">Alex Chen</span> created a new
-                cycling activity near you
+                tennis activity near you
               </p>
               <p className="text-xs text-text-secondary mt-1">2 days ago</p>
             </div>

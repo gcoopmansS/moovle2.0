@@ -87,7 +87,9 @@ export default function MatesPage() {
       {count !== undefined && (
         <span
           className={`ml-2 px-2 py-1 text-xs border ${
-            activeTab === tab ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-300"
+            activeTab === tab
+              ? "bg-gray-800 border-gray-700"
+              : "bg-gray-100 border-gray-300"
           }`}
         >
           {count}

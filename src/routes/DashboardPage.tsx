@@ -1,5 +1,11 @@
 import { mockActivities } from "../data/mockActivities";
 import type { Activity } from "../domain/types";
+import {
+  TennisIcon,
+  PadelIcon,
+  CalendarIcon,
+  LocationIcon,
+} from "../components/icons";
 
 // Helper functions
 const formatDateTime = (isoString: string) => {
@@ -29,17 +35,12 @@ const formatDateTime = (isoString: string) => {
   });
 };
 
-const getSportEmoji = (sport: Activity["sport"]) => {
-  const sportEmojis = {
-    tennis: "🎾",
-    padel: "🏓",
-    running: "🏃‍♂️",
-    cycling: "🚴‍♂️",
-    walking: "🚶‍♂️",
-    gym: "💪",
-    other: "⚽",
+const getSportIcon = (sport: Activity["sport"]) => {
+  const sportIcons = {
+    tennis: <TennisIcon className="w-5 h-5" />,
+    padel: <PadelIcon className="w-5 h-5" />,
   };
-  return sportEmojis[sport];
+  return sportIcons[sport] || <TennisIcon className="w-5 h-5" />;
 };
 
 // Personal Overview Component
@@ -65,8 +66,8 @@ function PersonalOverview() {
               key={activity.id}
               className="flex items-center space-x-3 p-3 bg-gray-50 border border-gray-200"
             >
-              <div className="text-lg w-8 h-8 bg-gray-100 flex items-center justify-center">
-                {getSportEmoji(activity.sport)}
+              <div className="w-8 h-8 bg-gray-100 flex items-center justify-center">
+                {getSportIcon(activity.sport)}
               </div>
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium text-gray-900 truncate">
@@ -114,8 +115,8 @@ function ActivityCard({ activity }: { activity: Activity }) {
       {/* Minimal Sport Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center space-x-3">
-          <div className="text-2xl w-10 h-10 bg-gray-100 flex items-center justify-center">
-            {getSportEmoji(activity.sport)}
+          <div className="w-10 h-10 bg-gray-100 flex items-center justify-center">
+            {getSportIcon(activity.sport)}
           </div>
           <div>
             <h3 className="font-semibold text-gray-900 text-lg">
@@ -129,7 +130,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
       {/* Minimal Activity Details */}
       <div className="space-y-3 mb-6">
         <div className="flex items-center text-gray-600 text-sm">
-          <span className="mr-2">📅</span>
+          <CalendarIcon className="w-4 h-4 mr-2" />
           <span>{formatDateTime(activity.startTime)}</span>
           {activity.durationMinutes && (
             <span className="ml-2 text-gray-900 font-medium">
@@ -140,7 +141,7 @@ function ActivityCard({ activity }: { activity: Activity }) {
 
         {activity.location && (
           <div className="flex items-center text-gray-600 text-sm">
-            <span className="mr-2">📍</span>
+            <LocationIcon className="w-4 h-4 mr-2" />
             <span>{activity.location}</span>
           </div>
         )}
