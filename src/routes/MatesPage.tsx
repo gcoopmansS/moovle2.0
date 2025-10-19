@@ -77,17 +77,17 @@ export default function MatesPage() {
   }) => (
     <button
       onClick={() => setActiveTab(tab)}
-      className={`px-6 py-3 rounded-xl font-medium transition-all ${
+      className={`px-6 py-3 font-medium transition-colors cursor-pointer ${
         activeTab === tab
-          ? "bg-blue-600 text-white shadow-lg"
-          : "bg-white/80 text-gray-600 hover:bg-white hover:text-gray-900"
+          ? "bg-gray-900 text-white border border-gray-900"
+          : "bg-white text-gray-600 hover:bg-gray-50 hover:text-gray-900 border border-gray-200"
       }`}
     >
       {label}
       {count !== undefined && (
         <span
-          className={`ml-2 px-2 py-1 rounded-full text-xs ${
-            activeTab === tab ? "bg-blue-500" : "bg-gray-200"
+          className={`ml-2 px-2 py-1 text-xs border ${
+            activeTab === tab ? "bg-gray-800 border-gray-700" : "bg-gray-100 border-gray-300"
           }`}
         >
           {count}
@@ -105,10 +105,10 @@ export default function MatesPage() {
     type: "friend" | "request" | "discover";
     requestId?: string;
   }) => (
-    <div className="bg-white/80 backdrop-blur-md rounded-2xl p-6 border border-white/20 hover:bg-white/90 transition-all">
+    <div className="bg-white p-6 border border-gray-200 hover:bg-gray-50 transition-colors">
       <div className="flex items-start justify-between mb-4">
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center text-white text-lg font-semibold">
+          <div className="w-12 h-12 bg-gray-900 flex items-center justify-center text-white text-lg font-semibold">
             {mate.avatar}
           </div>
           <div>
@@ -119,7 +119,7 @@ export default function MatesPage() {
 
         {type === "friend" && (
           <div className="flex space-x-2">
-            <button className="p-2 text-blue-600 hover:bg-blue-50 rounded-xl transition-colors">
+            <button className="p-2 text-gray-600 hover:bg-gray-100 transition-colors cursor-pointer">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -134,7 +134,7 @@ export default function MatesPage() {
                 />
               </svg>
             </button>
-            <button className="p-2 text-gray-400 hover:bg-gray-50 rounded-xl transition-colors">
+            <button className="p-2 text-gray-400 hover:bg-gray-100 transition-colors cursor-pointer">
               <svg
                 className="w-5 h-5"
                 fill="none"
@@ -156,13 +156,13 @@ export default function MatesPage() {
           <div className="flex space-x-2">
             <button
               onClick={() => acceptFriendRequest(requestId)}
-              className="px-4 py-2 bg-blue-600 text-white rounded-xl text-sm font-medium hover:bg-blue-700 transition-colors"
+              className="px-4 py-2 bg-gray-900 text-white text-sm font-medium hover:bg-gray-800 transition-colors cursor-pointer"
             >
               Accept
             </button>
             <button
               onClick={() => declineFriendRequest(requestId)}
-              className="px-4 py-2 bg-gray-100 text-gray-600 rounded-xl text-sm font-medium hover:bg-gray-200 transition-colors"
+              className="px-4 py-2 bg-gray-100 text-gray-600 text-sm font-medium hover:bg-gray-200 transition-colors cursor-pointer"
             >
               Decline
             </button>
@@ -173,10 +173,10 @@ export default function MatesPage() {
           <button
             onClick={() => sendFriendRequest(mate.id)}
             disabled={hasPendingRequest(user?.id || "", mate.id)}
-            className={`px-4 py-2 rounded-xl text-sm font-medium transition-all transform hover:scale-[1.02] ${
+            className={`px-4 py-2 text-sm font-medium transition-colors ${
               hasPendingRequest(user?.id || "", mate.id)
                 ? "bg-gray-100 text-gray-500 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-blue-700 text-white hover:from-blue-700 hover:to-blue-800"
+                : "bg-gray-900 text-white hover:bg-gray-800 cursor-pointer"
             }`}
           >
             {hasPendingRequest(user?.id || "", mate.id) ? "Pending" : "Connect"}
@@ -190,7 +190,7 @@ export default function MatesPage() {
         {mate.sports.map((sport) => (
           <span
             key={sport}
-            className="px-3 py-1 bg-gradient-to-r from-blue-50 to-blue-100 text-blue-700 rounded-full text-xs font-medium"
+            className="px-3 py-1 bg-blue-50 text-blue-700 text-xs font-medium border border-blue-200"
           >
             {sport}
           </span>
@@ -212,7 +212,7 @@ export default function MatesPage() {
 
       {/* Tab Navigation */}
       <div className="flex justify-center">
-        <div className="flex space-x-2 bg-gray-50/80 p-2 rounded-2xl backdrop-blur-sm">
+        <div className="flex space-x-2 bg-gray-50 p-2 border border-gray-200">
           <TabButton tab="friends" label="Friends" count={friends.length} />
           <TabButton
             tab="requests"

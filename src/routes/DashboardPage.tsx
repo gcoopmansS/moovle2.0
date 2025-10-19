@@ -48,7 +48,7 @@ function PersonalOverview() {
   const userActivities = mockActivities.slice(0, 2);
 
   return (
-    <div className="card-minimal rounded-2xl p-6 mb-8">
+    <div className="card-minimal p-6 mb-8 border border-gray-200">
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-semibold text-gray-900">
           Your Upcoming Activities
@@ -63,9 +63,9 @@ function PersonalOverview() {
           {userActivities.map((activity) => (
             <div
               key={activity.id}
-              className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg"
+              className="flex items-center space-x-3 p-3 bg-gray-50 border border-gray-200"
             >
-              <div className="text-lg w-8 h-8 bg-gray-100 rounded-lg flex items-center justify-center">
+              <div className="text-lg w-8 h-8 bg-gray-100 flex items-center justify-center">
                 {getSportEmoji(activity.sport)}
               </div>
               <div className="flex-1 min-w-0">
@@ -110,11 +110,11 @@ function ActivityCard({ activity }: { activity: Activity }) {
   const buttonState = getButtonState();
 
   return (
-    <div className="card-minimal rounded-2xl p-6 group">
+    <div className="card-minimal p-6 group border border-gray-200">
       {/* Minimal Sport Header */}
       <div className="flex items-start justify-between mb-5">
         <div className="flex items-center space-x-3">
-          <div className="text-2xl w-10 h-10 bg-gray-100 rounded-xl flex items-center justify-center">
+          <div className="text-2xl w-10 h-10 bg-gray-100 flex items-center justify-center">
             {getSportEmoji(activity.sport)}
           </div>
           <div>
@@ -166,14 +166,14 @@ function ActivityCard({ activity }: { activity: Activity }) {
       <div className="flex items-center justify-between pt-4 border-t border-gray-200">
         <div className="flex items-center space-x-2">
           {activity.autoAccept && (
-            <span className="bg-green-100 text-green-700 px-2 py-1 rounded-md text-xs font-medium">
+            <span className="bg-green-100 text-green-700 px-2 py-1 text-xs font-medium border border-green-200">
               Auto-accept
             </span>
           )}
         </div>
 
         <button
-          className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${buttonState.className}`}
+          className={`px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${buttonState.className}`}
           disabled={buttonState.disabled}
         >
           {buttonState.text}
@@ -230,7 +230,7 @@ export default function DashboardPage() {
                 {/* Add subtle indicator for mates activities */}
                 {activity.privacy === "MATES" && (
                   <div className="absolute top-3 right-3">
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded-full">
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 border border-blue-200">
                       mate
                     </span>
                   </div>
@@ -239,7 +239,7 @@ export default function DashboardPage() {
             ))}
           </div>
         ) : (
-          <div className="text-center py-16 card-minimal rounded-2xl">
+          <div className="text-center py-16 card-minimal border border-gray-200">
             <div className="text-2xl mb-2">😴</div>
             <p className="text-gray-500 text-sm">
               No activities to discover yet
@@ -250,7 +250,7 @@ export default function DashboardPage() {
 
       {/* Global Empty State */}
       {mockActivities.length === 0 && (
-        <div className="text-center py-16 card-minimal rounded-2xl">
+        <div className="text-center py-16 card-minimal border border-gray-200">
           <div className="text-4xl mb-4">🏸</div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             No activities yet
@@ -258,7 +258,7 @@ export default function DashboardPage() {
           <p className="text-gray-500 mb-6">
             Be the first to create one and get moving
           </p>
-          <button className="btn-minimal px-4 py-2 rounded-lg text-sm font-medium">
+          <button className="btn-minimal px-4 py-2 text-sm font-medium cursor-pointer">
             Create Activity
           </button>
         </div>
