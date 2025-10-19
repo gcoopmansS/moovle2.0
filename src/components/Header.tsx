@@ -4,7 +4,11 @@ import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Login } from "./Login";
 
-export default function Header() {
+interface HeaderProps {
+  onOpenCreateModal: () => void;
+}
+
+export default function Header({ onOpenCreateModal }: HeaderProps) {
   const location = useLocation();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -45,13 +49,33 @@ export default function Header() {
             <Link to="/agenda" className={tabClass("/agenda")}>
               Agenda
             </Link>
-            <Link to="/create" className={tabClass("/create")}>
-              Create
-            </Link>
           </nav>
 
           {/* Modern Action Buttons */}
           <div className="flex items-center space-x-3">
+            {/* Create Activity Button - Only show when authenticated */}
+            {isAuthenticated && (
+              <button
+                onClick={onOpenCreateModal}
+                className="relative p-3 text-gray-500 hover:text-gray-900 hover:bg-white/80 rounded-xl transition-all duration-300 hover:shadow-sm border border-transparent hover:border-gray-200/50 group"
+                title="Create Activity"
+              >
+                <svg
+                  className="w-5 h-5"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+              </button>
+            )}
+
             {/* Modern Mobile menu button */}
             <button
               className="md:hidden relative p-3 text-gray-500 hover:text-gray-900 hover:bg-white/80 rounded-xl transition-all duration-300 hover:shadow-sm border border-transparent hover:border-gray-200/50"
@@ -156,17 +180,30 @@ export default function Header() {
               >
                 Agenda
               </Link>
-              <Link
-                to="/create"
-                className={`mx-4 px-4 py-3 text-sm font-medium transition-all duration-300 ${
-                  isActiveTab("/create")
-                    ? "text-gray-900 bg-white shadow-sm border border-gray-200/50"
-                    : "text-gray-500 hover:text-gray-900 hover:bg-white/60"
-                } rounded-xl`}
-                onClick={() => setIsMobileMenuOpen(false)}
+
+              {/* Create Activity Button for Mobile */}
+              <button
+                onClick={() => {
+                  onOpenCreateModal();
+                  setIsMobileMenuOpen(false);
+                }}
+                className="mx-4 px-4 py-3 text-sm font-medium transition-all duration-300 text-gray-500 hover:text-gray-900 hover:bg-white/60 rounded-xl flex items-center space-x-2"
               >
-                Create
-              </Link>
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 4v16m8-8H4"
+                  />
+                </svg>
+                <span>Create Activity</span>
+              </button>
             </nav>
           </div>
         )}

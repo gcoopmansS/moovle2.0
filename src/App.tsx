@@ -7,7 +7,6 @@ import LandingPage from "./routes/LandingPage";
 import DashboardPage from "./routes/DashboardPage";
 import MatesPage from "./routes/MatesPage";
 import AgendaPage from "./routes/AgendaPage";
-import CreatePage from "./routes/CreatePage";
 import NotificationsPage from "./routes/NotificationsPage";
 
 function AppRoutes() {
@@ -39,7 +38,6 @@ function AppRoutes() {
         <Route path="dashboard" element={<DashboardPage />} />
         <Route path="mates" element={<MatesPage />} />
         <Route path="agenda" element={<AgendaPage />} />
-        <Route path="create" element={<CreatePage />} />
         <Route path="notifications" element={<NotificationsPage />} />
       </Route>
       <Route path="*" element={<Navigate to="/dashboard" replace />} />
