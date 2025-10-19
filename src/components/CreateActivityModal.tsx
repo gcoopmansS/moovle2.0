@@ -1,4 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import {
+  getSportConfig,
+  getOrderedFields,
+  generateInitialFormData,
+  getAllSports,
+  type SportConfiguration,
+  type SportFieldConfig,
+} from "../domain/sportConfig";
+import type { Sport } from "../domain/types";
+import { TennisIcon, PadelIcon } from "./icons";
+
+// Icon mapping for dynamic rendering
+const SPORT_ICONS = {
+  TennisIcon,
+  PadelIcon,
+} as const;
+import { DynamicField } from "./DynamicField";
 
 interface CreateActivityModalProps {
   isOpen: boolean;
@@ -9,39 +26,86 @@ export function CreateActivityModal({
   isOpen,
   onClose,
 }: CreateActivityModalProps) {
-  const [formData, setFormData] = useState({
-    title: "",
+  const [step, setStep] = useState<"sport-selection" | "activity-form">(
+    "sport-selection"
+  );
+  const [selectedSport, setSelectedSport] = useState<Sport | null>(null);
+
+  const [formData, setFormData] = useState<
+    Record<string, string | number | boolean>
+  >({
     sport: "",
-    privacy: "PUBLIC",
+    privacy: "MATES",
     date: "",
     time: "",
-    location: "",
-    duration: "",
-    maxParticipants: "",
-    autoAccept: false,
   });
+
+  const [currentSportConfig, setCurrentSportConfig] =
+    useState<SportConfiguration | null>(null);
+
+  // Handle sport selection
+  const handleSportSelection = (sport: Sport) => {
+    setSelectedSport(sport);
+    const sportConfig = getSportConfig(sport);
+    const initialData = generateInitialFormData(sportConfig);
+    setFormData({
+      ...initialData,
+      sport,
+      privacy: "MATES",
+      date: "",
+      time: "",
+    });
+    setStep("activity-form");
+  };
+
+  // Handle going back to sport selection
+  const handleBackToSportSelection = () => {
+    setStep("sport-selection");
+    setSelectedSport(null);
+    setFormData({
+      sport: "",
+      privacy: "MATES",
+      date: "",
+      time: "",
+    });
+    setCurrentSportConfig(null);
+  };
+
+  // Reset modal when closed
+  const handleClose = () => {
+    setStep("sport-selection");
+    setSelectedSport(null);
+    setFormData({
+      sport: "",
+      privacy: "MATES",
+      date: "",
+      time: "",
+    });
+    setCurrentSportConfig(null);
+    onClose();
+  };
+
+  // Update form defaults when sport changes
+  useEffect(() => {
+    if (selectedSport) {
+      const sportConfig = getSportConfig(selectedSport);
+      setCurrentSportConfig(sportConfig);
+    } else {
+      setCurrentSportConfig(null);
+    }
+  }, [selectedSport]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Handle form submission
     console.log("Creating activity:", formData);
-    onClose();
-    // Reset form
-    setFormData({
-      title: "",
-      sport: "",
-      privacy: "PUBLIC",
-      date: "",
-      time: "",
-      location: "",
-      duration: "",
-      maxParticipants: "",
-      autoAccept: false,
-    });
+    handleClose();
   };
 
   const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value, type } = e.target;
     setFormData((prev) => ({
@@ -60,14 +124,18 @@ export function CreateActivityModal({
         <div className="flex items-center justify-between p-6 border-b border-gray-200">
           <div>
             <h2 className="text-2xl font-bold text-gray-900">
-              Create Activity
+              {step === "sport-selection"
+                ? "Choose Your Sport"
+                : `Create ${currentSportConfig?.displayName} Activity`}
             </h2>
             <p className="text-gray-600 mt-1">
-              Organize a sport activity with your mates
+              {step === "sport-selection"
+                ? "Select which sport you want to organize"
+                : `Organize a ${currentSportConfig?.displayName.toLowerCase()} activity with your mates`}
             </p>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="text-gray-400 hover:text-gray-600 transition-colors cursor-pointer"
           >
             <svg
@@ -88,196 +156,255 @@ export function CreateActivityModal({
 
         {/* Modal Content */}
         <div className="p-6">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Activity Title */}
+          {step === "sport-selection" ? (
+            // Step 1: Sport Selection
+            <div className="space-y-6">
+              <div className="text-center mb-8">
+                <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                  What sport do you want to play?
+                </h3>
+                <p className="text-gray-600">
+                  Choose your sport to get a customized activity form
+                </p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {getAllSports().map(([sportKey, sportConfig]) => {
+                  const IconComponent =
+                    SPORT_ICONS[sportConfig.icon as keyof typeof SPORT_ICONS];
+                  const colors = sportConfig.color;
+
+                  return (
+                    <button
+                      key={sportKey}
+                      onClick={() => handleSportSelection(sportKey)}
+                      className={`p-6 border-2 border-gray-200 hover:border-${colors.hover} hover:bg-${colors.background} transition-all duration-200 text-left group`}
+                    >
+                      <div className="flex items-center space-x-4">
+                        <div
+                          className={`p-3 bg-${
+                            colors.iconBg
+                          } group-hover:bg-${colors.iconBg.replace(
+                            "100",
+                            "200"
+                          )} transition-colors`}
+                        >
+                          <IconComponent
+                            className={`w-8 h-8 text-${colors.iconColor}`}
+                          />
+                        </div>
+                        <div>
+                          <h4 className="text-xl font-semibold text-gray-900 mb-1">
+                            {sportConfig.displayName}
+                          </h4>
+                          <p className="text-gray-600 text-sm">
+                            {sportConfig.description}
+                          </p>
+                          <div className="mt-2 text-xs text-gray-500">
+                            {sportConfig.highlights.map((highlight, index) => (
+                              <span key={index}>
+                                • {highlight}
+                                {index < sportConfig.highlights.length - 1
+                                  ? " "
+                                  : ""}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ) : (
+            // Step 2: Activity Form
             <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Activity Title
-              </label>
-              <input
-                type="text"
-                name="title"
-                value={formData.title}
-                onChange={handleInputChange}
-                placeholder="e.g., Morning Tennis Session"
-                className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
-                required
-              />
-            </div>
-
-            {/* Sport & Privacy Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Sport
-                </label>
-                <select
-                  name="sport"
-                  value={formData.sport}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
-                  required
-                >
-                  <option value="">Select sport</option>
-                  <option value="tennis">Tennis</option>
-                  <option value="padel">Padel</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Privacy
-                </label>
-                <select
-                  name="privacy"
-                  value={formData.privacy}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
-                >
-                  <option value="PUBLIC">🌍 Public</option>
-                  <option value="MATES">👥 Mates Only</option>
-                  <option value="INVITE_ONLY">📩 Invite Only</option>
-                </select>
-              </div>
-            </div>
-
-            {/* Date & Time Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Date
-                </label>
-                <input
-                  type="date"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Time
-                </label>
-                <input
-                  type="time"
-                  name="time"
-                  value={formData.time}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Location */}
-            <div>
-              <label className="block text-sm font-medium text-gray-900 mb-2">
-                Location
-              </label>
-              <input
-                type="text"
-                name="location"
-                value={formData.location}
-                onChange={handleInputChange}
-                placeholder="e.g., Central Park Tennis Courts"
-                className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
-                required
-              />
-            </div>
-
-            {/* Duration & Capacity Row */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Duration (minutes)
-                </label>
-                <input
-                  type="number"
-                  name="duration"
-                  value={formData.duration}
-                  onChange={handleInputChange}
-                  placeholder="90"
-                  min="15"
-                  max="480"
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
-                  required
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-900 mb-2">
-                  Max Participants
-                </label>
-                <input
-                  type="number"
-                  name="maxParticipants"
-                  value={formData.maxParticipants}
-                  onChange={handleInputChange}
-                  placeholder="4"
-                  min="2"
-                  max="50"
-                  className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Auto Accept */}
-            <div className="flex items-center space-x-3">
-              <input
-                type="checkbox"
-                id="autoAccept"
-                name="autoAccept"
-                checked={formData.autoAccept}
-                onChange={handleInputChange}
-                className="w-4 h-4 text-gray-900 bg-white border-gray-300 focus:ring-gray-900 focus:ring-2 cursor-pointer"
-              />
-              <label
-                htmlFor="autoAccept"
-                className="text-sm text-gray-900 cursor-pointer"
-              >
-                Automatically accept join requests
-              </label>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+              {/* Back button */}
               <button
-                type="button"
-                onClick={onClose}
-                className="px-6 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium transition-colors cursor-pointer"
+                onClick={handleBackToSportSelection}
+                className="flex items-center space-x-2 text-gray-600 hover:text-gray-900 mb-6 transition-colors"
               >
-                Cancel
+                <svg
+                  className="w-4 h-4"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M15 19l-7-7 7-7"
+                  />
+                </svg>
+                <span>Back to sport selection</span>
               </button>
-              <button
-                type="submit"
-                className="bg-gray-900 text-white px-6 py-3 font-medium hover:bg-gray-800 transition-colors cursor-pointer"
-              >
-                Create Activity
-              </button>
-            </div>
-          </form>
 
-          {/* Tips */}
-          <div className="mt-6 bg-gray-50 border border-gray-200 p-4">
-            <div className="flex items-start space-x-3">
-              <div className="text-gray-600 text-lg">💡</div>
-              <div>
-                <h4 className="font-medium text-gray-900 mb-1">
-                  Tips for great activities
-                </h4>
-                <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Choose a clear, descriptive title</li>
-                  <li>• Pick a convenient location for participants</li>
-                  <li>• Set realistic capacity based on sport type</li>
-                  <li>• Enable auto-accept for casual activities</li>
-                </ul>
-              </div>
+              <form onSubmit={handleSubmit} className="space-y-6">
+                {/* Date & Time Row (always first) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Date *
+                    </label>
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date as string}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-900 mb-2">
+                      Time *
+                    </label>
+                    <input
+                      type="time"
+                      name="time"
+                      value={formData.time as string}
+                      onChange={handleInputChange}
+                      className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
+                      required
+                    />
+                  </div>
+                </div>
+
+                {/* Dynamic Sport Fields */}
+                {currentSportConfig && selectedSport && (
+                  <>
+                    {(() => {
+                      const orderedFields = getOrderedFields(selectedSport);
+                      const elements: React.ReactElement[] = [];
+                      let halfWidthGroup: Array<[string, SportFieldConfig]> =
+                        [];
+
+                      orderedFields.forEach(
+                        ([fieldName, fieldConfig], index) => {
+                          const value =
+                            formData[fieldName] ??
+                            (fieldConfig.defaultValue || "");
+
+                          if (fieldConfig.width === "half") {
+                            // Collect half-width fields
+                            halfWidthGroup.push([fieldName, fieldConfig]);
+
+                            // If we have 2 half-width fields or this is the last field, render the group
+                            if (
+                              halfWidthGroup.length === 2 ||
+                              index === orderedFields.length - 1
+                            ) {
+                              elements.push(
+                                <div
+                                  key={`group-${halfWidthGroup[0][0]}`}
+                                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                >
+                                  {halfWidthGroup.map(([name, config]) => {
+                                    const fieldValue =
+                                      formData[name] ??
+                                      (config.defaultValue || "");
+                                    return (
+                                      <div key={name}>
+                                        <DynamicField
+                                          fieldName={name}
+                                          fieldConfig={config}
+                                          value={fieldValue}
+                                          onChange={handleInputChange}
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                              halfWidthGroup = []; // Reset the group
+                            }
+                          } else {
+                            // Full width field - first flush any pending half-width group
+                            if (halfWidthGroup.length > 0) {
+                              elements.push(
+                                <div
+                                  key={`group-${halfWidthGroup[0][0]}`}
+                                  className="grid grid-cols-1 md:grid-cols-2 gap-4"
+                                >
+                                  {halfWidthGroup.map(([name, config]) => {
+                                    const fieldValue =
+                                      formData[name] ??
+                                      (config.defaultValue || "");
+                                    return (
+                                      <div key={name}>
+                                        <DynamicField
+                                          fieldName={name}
+                                          fieldConfig={config}
+                                          value={fieldValue}
+                                          onChange={handleInputChange}
+                                        />
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              );
+                              halfWidthGroup = [];
+                            }
+
+                            // Render full width field
+                            elements.push(
+                              <div key={fieldName}>
+                                <DynamicField
+                                  fieldName={fieldName}
+                                  fieldConfig={fieldConfig}
+                                  value={value}
+                                  onChange={handleInputChange}
+                                />
+                              </div>
+                            );
+                          }
+                        }
+                      );
+
+                      return elements;
+                    })()}
+                  </>
+                )}
+
+                {/* Privacy (always last) */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-900 mb-2">
+                    Privacy
+                  </label>
+                  <select
+                    name="privacy"
+                    value={formData.privacy as string}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
+                  >
+                    <option value="MATES">Mates Only</option>
+                    <option value="PUBLIC">Public</option>
+                    <option value="INVITE_ONLY">Invite Only</option>
+                  </select>
+                </div>
+
+                {/* Action Buttons */}
+                <div className="flex justify-end space-x-3 pt-4 border-t border-gray-200">
+                  <button
+                    type="button"
+                    onClick={handleClose}
+                    className="px-6 py-3 border border-gray-200 text-gray-600 hover:bg-gray-50 font-medium transition-colors cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="bg-gray-900 text-white px-6 py-3 font-medium hover:bg-gray-800 transition-colors cursor-pointer"
+                  >
+                    Create Activity
+                  </button>
+                </div>
+              </form>
             </div>
-          </div>
+          )}
         </div>
       </div>
     </div>

@@ -1,13 +1,6 @@
 export type Privacy = "MATES" | "PUBLIC" | "INVITE_ONLY";
 
-export type Sport =
-  | "tennis"
-  | "padel"
-  | "running"
-  | "cycling"
-  | "walking"
-  | "gym"
-  | "other";
+export type Sport = "tennis" | "padel";
 
 export interface Activity {
   id: string;
