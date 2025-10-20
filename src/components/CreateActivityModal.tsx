@@ -168,38 +168,40 @@ export function CreateActivityModal({
                 </p>
               </div>
 
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                {getAllSports().map(([sportKey, sportConfig]) => {
-                  const IconComponent =
-                    SPORT_ICONS[sportConfig.icon as keyof typeof SPORT_ICONS];
-                  const colors = sportConfig.color;
+              <div className="flex justify-center">
+                <div className="grid grid-cols-2 gap-6 w-full max-w-lg">
+                  {getAllSports().map(([sportKey, sportConfig]) => {
+                    const IconComponent =
+                      SPORT_ICONS[sportConfig.icon as keyof typeof SPORT_ICONS];
+                    const colors = sportConfig.color;
 
-                  return (
-                    <button
-                      key={sportKey}
-                      onClick={() => handleSportSelection(sportKey)}
-                      className={`group relative p-6 border-2 border-gray-200 hover:border-${colors.hover} hover:shadow-lg hover:shadow-${colors.background} transition-all duration-300 transform hover:-translate-y-1 bg-white cursor-pointer`}
-                    >
-                      {/* Icon Container */}
-                      <div className="flex flex-col items-center space-y-3">
-                        <div
-                          className={`p-4 bg-${colors.iconBg} group-hover:bg-${colors.iconColor} group-hover:scale-110 transition-all duration-300`}
-                        >
-                          <IconComponent
-                            className={`w-8 h-8 text-${colors.iconColor} group-hover:text-white transition-colors duration-300`}
-                          />
-                        </div>
+                    return (
+                      <button
+                        key={sportKey}
+                        onClick={() => handleSportSelection(sportKey)}
+                        className={`w-full group relative p-6 border-2 border-gray-200 hover:border-${colors.hover} hover:shadow-lg hover:shadow-${colors.background} transition-all duration-300 transform hover:-translate-y-1 bg-white cursor-pointer`}
+                      >
+                        {/* Icon Container */}
+                        <div className="flex flex-col items-center space-y-3">
+                          <div
+                            className={`p-4 bg-${colors.iconBg} group-hover:bg-${colors.iconColor} group-hover:scale-110 transition-all duration-300`}
+                          >
+                            <IconComponent
+                              className={`w-8 h-8 text-${colors.iconColor} group-hover:text-white transition-colors duration-300`}
+                            />
+                          </div>
 
-                        {/* Sport Name */}
-                        <div className="text-center">
-                          <h3 className="font-semibold text-gray-900 group-hover:text-gray-800 transition-colors">
-                            {sportConfig.displayName}
-                          </h3>
+                          {/* Sport Name */}
+                          <div className="text-center">
+                            <h3 className="font-semibold text-gray-900 group-hover:text-gray-800 transition-colors">
+                              {sportConfig.displayName}
+                            </h3>
+                          </div>
                         </div>
-                      </div>
-                    </button>
-                  );
-                })}
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           ) : (
