@@ -1,4 +1,4 @@
-import { CalendarIcon, TrophyIcon } from "../components/icons";
+import { HiCalendarDays, HiTrophy } from "react-icons/hi2";
 
 export default function AgendaPage() {
   return (
@@ -26,7 +26,7 @@ export default function AgendaPage() {
 
           <div className="bg-surface border border-text-secondary/10 p-8 text-center">
             <div className="mb-4 flex justify-center">
-              <CalendarIcon className="w-12 h-12 text-gray-400" />
+              <HiCalendarDays className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-lg font-medium text-text-primary mb-2">
               Your schedule is clear
@@ -51,7 +51,7 @@ export default function AgendaPage() {
 
           <div className="bg-surface border border-text-secondary/10 p-8 text-center">
             <div className="mb-4 flex justify-center opacity-50">
-              <TrophyIcon className="w-12 h-12 text-gray-400" />
+              <HiTrophy className="w-12 h-12 text-gray-400" />
             </div>
             <h3 className="text-lg font-medium text-text-primary mb-2">
               No activity history yet

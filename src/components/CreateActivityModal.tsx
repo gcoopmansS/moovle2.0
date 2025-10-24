@@ -8,13 +8,13 @@ import {
   type SportFieldConfig,
 } from "../domain/sportConfig";
 import type { Sport } from "../domain/types";
-import { TennisIcon, PadelIcon } from "./icons";
+import { TennisIcon, PadelIcon } from "./sportIcons";
 
 // Icon mapping for dynamic rendering
 const SPORT_ICONS = {
-  TennisIcon,
-  PadelIcon,
-} as const;
+  TennisIcon: TennisIcon,
+  PadelIcon: PadelIcon,
+};
 import { DynamicField } from "./DynamicField";
 
 interface CreateActivityModalProps {

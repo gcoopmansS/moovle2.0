@@ -1,4 +1,5 @@
-import { TennisIcon, WarningIcon } from "../components/icons";
+import { HiExclamationTriangle } from "react-icons/hi2";
+import { TennisIcon } from "../components/sportIcons";
 
 export default function NotificationsPage() {
   return (
@@ -62,7 +63,7 @@ export default function NotificationsPage() {
         <div className="bg-surface border border-text-secondary/10 p-4 hover:bg-surface/80 transition-colors duration-200 opacity-75">
           <div className="flex items-start space-x-4">
             <div className="bg-warning/10 p-2 flex-shrink-0">
-              <WarningIcon className="w-5 h-5 text-warning" />
+              <HiExclamationTriangle className="w-5 h-5 text-warning" />
             </div>
             <div className="flex-1">
               <p className="text-sm text-text-primary">

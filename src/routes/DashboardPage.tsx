@@ -1,11 +1,8 @@
 import { mockActivities } from "../data/mockActivities";
 import type { Activity } from "../domain/types";
-import {
-  TennisIcon,
-  PadelIcon,
-  CalendarIcon,
-  LocationIcon,
-} from "../components/icons";
+import { HiMoon, HiPuzzlePiece } from "react-icons/hi2";
+import { TennisIcon, PadelIcon } from "../components/sportIcons";
+import ActivityCard from "../components/ActivityCard";
 
 // Helper functions
 const formatDateTime = (isoString: string) => {
@@ -92,98 +89,6 @@ function PersonalOverview() {
   );
 }
 
-function ActivityCard({ activity }: { activity: Activity }) {
-  const getButtonState = () => {
-    if (activity.spotsLeft === 0) {
-      return {
-        text: "Full",
-        className: "bg-gray-200 text-gray-500 cursor-not-allowed",
-        disabled: true,
-      };
-    }
-    return {
-      text: "Join",
-      className: "btn-minimal text-white",
-      disabled: false,
-    };
-  };
-
-  const buttonState = getButtonState();
-
-  return (
-    <div className="card-minimal p-6 group border border-gray-200">
-      {/* Minimal Sport Header */}
-      <div className="flex items-start justify-between mb-5">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gray-100 flex items-center justify-center">
-            {getSportIcon(activity.sport)}
-          </div>
-          <div>
-            <h3 className="font-semibold text-gray-900 text-lg">
-              {activity.title}
-            </h3>
-            <p className="text-gray-500 text-sm">by {activity.organizer}</p>
-          </div>
-        </div>
-      </div>
-
-      {/* Minimal Activity Details */}
-      <div className="space-y-3 mb-6">
-        <div className="flex items-center text-gray-600 text-sm">
-          <CalendarIcon className="w-4 h-4 mr-2" />
-          <span>{formatDateTime(activity.startTime)}</span>
-          {activity.durationMinutes && (
-            <span className="ml-2 text-gray-900 font-medium">
-              • {activity.durationMinutes}min
-            </span>
-          )}
-        </div>
-
-        {activity.location && (
-          <div className="flex items-center text-gray-600 text-sm">
-            <LocationIcon className="w-4 h-4 mr-2" />
-            <span>{activity.location}</span>
-          </div>
-        )}
-
-        <div className="flex items-center text-gray-600 text-sm">
-          <span className="mr-2">👥</span>
-          <span>
-            <span
-              className={
-                activity.spotsLeft <= 2
-                  ? "text-red-600 font-medium"
-                  : "text-gray-600"
-              }
-            >
-              {activity.spotsLeft} spots left
-            </span>
-            <span className="text-gray-400"> of {activity.capacity}</span>
-          </span>
-        </div>
-      </div>
-
-      {/* Minimal Footer */}
-      <div className="flex items-center justify-between pt-4 border-t border-gray-200">
-        <div className="flex items-center space-x-2">
-          {activity.autoAccept && (
-            <span className="bg-green-100 text-green-700 px-2 py-1 text-xs font-medium border border-green-200">
-              Auto-accept
-            </span>
-          )}
-        </div>
-
-        <button
-          className={`px-4 py-2 text-sm font-medium transition-colors cursor-pointer ${buttonState.className}`}
-          disabled={buttonState.disabled}
-        >
-          {buttonState.text}
-        </button>
-      </div>
-    </div>
-  );
-}
-
 export default function DashboardPage() {
   // Filter activities by type for discovery feed
   const matesActivities = mockActivities.filter(
@@ -193,6 +98,13 @@ export default function DashboardPage() {
     (activity) => activity.privacy === "PUBLIC"
   );
   const discoveryActivities = [...matesActivities, ...publicActivities];
+
+  // Handler for joining activities - ready for real API integration
+  const handleJoinActivity = (activityId: string) => {
+    console.log("Joining activity:", activityId);
+    // TODO: Integrate with real API
+    // await joinActivity(activityId);
+  };
 
   return (
     <div>
@@ -227,7 +139,7 @@ export default function DashboardPage() {
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {discoveryActivities.map((activity) => (
               <div key={activity.id} className="relative">
-                <ActivityCard activity={activity} />
+                <ActivityCard activity={activity} onJoin={handleJoinActivity} />
                 {/* Add subtle indicator for mates activities */}
                 {activity.privacy === "MATES" && (
                   <div className="absolute top-3 right-3">
@@ -241,7 +153,9 @@ export default function DashboardPage() {
           </div>
         ) : (
           <div className="text-center py-16 card-minimal border border-gray-200">
-            <div className="text-2xl mb-2">😴</div>
+            <div className="flex justify-center mb-4">
+              <HiMoon className="w-8 h-8 text-gray-300" />
+            </div>
             <p className="text-gray-500 text-sm">
               No activities to discover yet
             </p>
@@ -252,7 +166,9 @@ export default function DashboardPage() {
       {/* Global Empty State */}
       {mockActivities.length === 0 && (
         <div className="text-center py-16 card-minimal border border-gray-200">
-          <div className="text-4xl mb-4">🏸</div>
+          <div className="flex justify-center mb-4">
+            <HiPuzzlePiece className="w-12 h-12 text-gray-300" />
+          </div>
           <h3 className="text-lg font-semibold text-gray-900 mb-2">
             No activities yet
           </h3>

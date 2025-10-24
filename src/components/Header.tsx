@@ -1,5 +1,6 @@
 import { Link, useLocation } from "react-router-dom";
-import { BellIcon, MenuIcon } from "./icons";
+import { HiBars3 } from "react-icons/hi2";
+import { HiOutlineBell } from "react-icons/hi";
 import { useState } from "react";
 import { useAuth } from "../hooks/useAuth";
 import { Login } from "./Login";
@@ -81,7 +82,7 @@ export default function Header({ onOpenCreateModal }: HeaderProps) {
               className="md:hidden relative p-3 text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
-              <MenuIcon className="w-5 h-5" />
+              <HiBars3 className="w-5 h-5" />
             </button>
 
             {/* Notifications button */}
@@ -89,7 +90,7 @@ export default function Header({ onOpenCreateModal }: HeaderProps) {
               to="/notifications"
               className="relative group p-3 text-gray-500 hover:text-gray-900 hover:bg-gray-50 transition-all duration-200 cursor-pointer"
             >
-              <BellIcon className="w-5 h-5" />
+              <HiOutlineBell className="w-5 h-5" />
               {/* Notification badge */}
               <span className="absolute -top-0.5 -right-0.5 bg-red-500 text-white text-xs w-4 h-4 flex items-center justify-center text-[10px] font-medium">
                 3
