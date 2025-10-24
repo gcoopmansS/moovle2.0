@@ -5,7 +5,7 @@ export const mockActivities: Activity[] = [
     id: "1",
     title: "Morning Tennis Session",
     sport: "tennis",
-    startTime: "2024-10-19T08:00:00Z",
+    startTime: "2025-10-25T08:00:00Z", // Today morning
     durationMinutes: 90,
     location: "Central Park Tennis Courts",
     privacy: "MATES",
@@ -18,7 +18,7 @@ export const mockActivities: Activity[] = [
     id: "2",
     title: "Competitive Padel Match",
     sport: "padel",
-    startTime: "2024-10-19T18:30:00Z",
+    startTime: "2025-10-25T18:30:00Z", // Today evening
     durationMinutes: 90,
     location: "Urban Padel Club",
     privacy: "PUBLIC",
@@ -31,7 +31,7 @@ export const mockActivities: Activity[] = [
     id: "3",
     title: "Weekend Tennis Doubles",
     sport: "tennis",
-    startTime: "2024-10-20T09:00:00Z",
+    startTime: "2025-10-26T09:00:00Z", // Tomorrow morning
     durationMinutes: 120,
     location: "Riverside Tennis Center",
     privacy: "PUBLIC",
@@ -44,7 +44,7 @@ export const mockActivities: Activity[] = [
     id: "4",
     title: "Beginner Padel Session",
     sport: "padel",
-    startTime: "2024-10-20T16:00:00Z",
+    startTime: "2025-10-27T16:00:00Z", // Sunday afternoon
     durationMinutes: 75,
     location: "Metro Padel Courts",
     privacy: "PUBLIC",
@@ -57,7 +57,7 @@ export const mockActivities: Activity[] = [
     id: "5",
     title: "Evening Tennis Practice",
     sport: "tennis",
-    startTime: "2024-10-19T19:00:00Z",
+    startTime: "2025-10-27T19:00:00Z", // Sunday evening
     durationMinutes: 90,
     location: "Downtown Tennis Complex",
     privacy: "MATES",
@@ -70,7 +70,7 @@ export const mockActivities: Activity[] = [
     id: "6",
     title: "Sunday Padel Tournament",
     sport: "padel",
-    startTime: "2024-10-21T10:00:00Z",
+    startTime: "2025-10-26T10:00:00Z", // Tomorrow (Saturday) morning
     durationMinutes: 180,
     location: "Elite Padel Academy",
     privacy: "PUBLIC",
@@ -83,7 +83,7 @@ export const mockActivities: Activity[] = [
     id: "7",
     title: "Ladies Tennis Morning",
     sport: "tennis",
-    startTime: "2024-10-21T09:30:00Z",
+    startTime: "2025-10-28T09:30:00Z", // Monday morning
     durationMinutes: 90,
     location: "Country Club Courts",
     privacy: "INVITE_ONLY",
@@ -96,7 +96,7 @@ export const mockActivities: Activity[] = [
     id: "8",
     title: "Mixed Padel Fun Match",
     sport: "padel",
-    startTime: "2024-10-22T17:00:00Z",
+    startTime: "2025-10-29T17:00:00Z", // Wednesday afternoon
     durationMinutes: 90,
     location: "SportCenter Padel Courts",
     privacy: "PUBLIC",
@@ -104,5 +104,31 @@ export const mockActivities: Activity[] = [
     autoAccept: true,
     spotsLeft: 2,
     organizer: "James Wilson",
+  },
+  {
+    id: "9",
+    title: "Friday Evening Tennis",
+    sport: "tennis",
+    startTime: "2025-10-31T18:00:00Z", // Friday evening (Halloween!)
+    durationMinutes: 90,
+    location: "Westside Tennis Club",
+    privacy: "MATES",
+    capacity: 4,
+    autoAccept: true,
+    spotsLeft: 1,
+    organizer: "Gil Coopmans",
+  },
+  {
+    id: "10",
+    title: "Saturday Morning Padel",
+    sport: "padel",
+    startTime: "2025-10-26T09:30:00Z", // Tomorrow (Saturday) morning
+    durationMinutes: 120,
+    location: "Premium Padel Center",
+    privacy: "PUBLIC",
+    capacity: 4,
+    autoAccept: false,
+    spotsLeft: 3,
+    organizer: "Gil Coopmans",
   },
 ];
