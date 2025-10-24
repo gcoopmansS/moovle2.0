@@ -365,7 +365,7 @@ export function CreateActivityModal({
                     name="privacy"
                     value={formData.privacy as string}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer"
+                    className="custom-select w-full pl-4 pr-12 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer appearance-none"
                   >
                     <option value="MATES">Mates Only</option>
                     <option value="PUBLIC">Public</option>

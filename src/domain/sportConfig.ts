@@ -14,7 +14,8 @@ export interface SportFieldConfig {
     | "checkbox"
     | "date"
     | "time"
-    | "textarea";
+    | "textarea"
+    | "location";
   options?: Array<{ value: string; label: string }>; // For select fields
   min?: number; // For number inputs
   max?: number; // For number inputs
@@ -72,9 +73,9 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       location: {
         required: true,
         label: "Location",
-        placeholder: "e.g., Central Park Tennis Courts",
-        helpText: "Specify the tennis court or facility",
-        type: "text",
+        placeholder: "Search for tennis courts near you...",
+        helpText: "Search and select a tennis court or facility",
+        type: "location",
         width: "full",
         order: 3,
       },
@@ -83,7 +84,7 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
         label: "Duration (minutes)",
         placeholder: "90",
         helpText: "How long will the tennis session last?",
-        defaultValue: 90,
+        defaultValue: 60,
         type: "number",
         min: 15,
         max: 480,
@@ -92,13 +93,14 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       },
       maxParticipants: {
         required: true,
-        label: "Max Players",
-        placeholder: "4",
-        helpText: "Maximum players (2 for singles, 4 for doubles)",
-        defaultValue: 4,
-        type: "number",
-        min: 2,
-        max: 50,
+        label: "Game Type",
+        helpText: "Choose between singles (1v1) or doubles (2v2)",
+        defaultValue: "doubles",
+        type: "select",
+        options: [
+          { value: "singles", label: "Singles (2 players)" },
+          { value: "doubles", label: "Doubles (4 players)" },
+        ],
         width: "half",
         order: 5,
       },
@@ -143,9 +145,9 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       location: {
         required: true,
         label: "Location",
-        placeholder: "e.g., Padel Club Amsterdam",
-        helpText: "Specify the padel court or facility",
-        type: "text",
+        placeholder: "Search for padel courts near you...",
+        helpText: "Search and select a padel court or facility",
+        type: "location",
         width: "full",
         order: 3,
       },
@@ -154,7 +156,7 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
         label: "Duration (minutes)",
         placeholder: "60",
         helpText: "How long will the padel session last?",
-        defaultValue: 60,
+        defaultValue: 90,
         type: "number",
         min: 15,
         max: 480,
@@ -163,9 +165,10 @@ export const SPORT_CONFIGURATIONS: Record<Sport, SportConfiguration> = {
       },
       maxParticipants: {
         required: true,
-        label: "Max Players",
+        label: "Max Players (including you)",
         placeholder: "4",
-        helpText: "Padel is always played with 4 players (2v2)",
+        helpText:
+          "Total players including yourself - Padel is always 4 players (2v2)",
         defaultValue: 4,
         type: "number",
         min: 4,

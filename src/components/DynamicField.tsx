@@ -1,5 +1,6 @@
 import React from "react";
 import type { SportFieldConfig } from "../domain/sportConfig";
+import { LocationAutocomplete } from "./LocationAutocomplete";
 
 interface DynamicFieldProps {
   fieldName: string;
@@ -58,7 +59,7 @@ export function DynamicField({
             name={fieldName}
             value={value as string}
             onChange={onChange}
-            className={`${baseClassName} cursor-pointer`}
+            className={`custom-select w-full pl-4 pr-12 py-3 border border-gray-200 bg-white focus:outline-none focus:border-gray-900 transition-colors cursor-pointer appearance-none ${className}`}
             required={fieldConfig.required}
           >
             {fieldConfig.options?.map((option) => (
@@ -101,6 +102,22 @@ export function DynamicField({
             onChange={onChange}
             className={`${baseClassName} cursor-pointer`}
             required={fieldConfig.required}
+          />
+        );
+
+      case "location":
+        return (
+          <LocationAutocomplete
+            name={fieldName}
+            value={value as string}
+            onChange={onChange}
+            placeholder={fieldConfig.placeholder}
+            required={fieldConfig.required}
+            className={className}
+            onLocationSelect={(location) => {
+              // Store additional location data if needed
+              console.log("Selected location:", location);
+            }}
           />
         );
 
