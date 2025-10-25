@@ -14,4 +14,5 @@ export interface Activity {
   autoAccept: boolean;
   spotsLeft: number;
   organizer: string;
+  joinedUsers?: string[]; // Array of user IDs who have joined
 }

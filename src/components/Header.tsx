@@ -44,11 +44,11 @@ export default function Header({ onOpenCreateModal }: HeaderProps) {
             <Link to="/dashboard" className={tabClass("/dashboard")}>
               Dashboard
             </Link>
-            <Link to="/mates" className={tabClass("/mates")}>
-              Mates
-            </Link>
             <Link to="/agenda" className={tabClass("/agenda")}>
               Agenda
+            </Link>
+            <Link to="/mates" className={tabClass("/mates")}>
+              Mates
             </Link>
           </nav>
 

@@ -2,7 +2,14 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { mockActivities } from "../data/mockActivities";
 import type { Activity } from "../domain/types";
-import { HiMoon, HiPuzzlePiece, HiPlus, HiCalendarDays } from "react-icons/hi2";
+import {
+  HiPuzzlePiece,
+  HiPlus,
+  HiCalendarDays,
+  HiUsers,
+  HiChevronLeft,
+  HiChevronRight,
+} from "react-icons/hi2";
 import { TennisIcon, PadelIcon } from "../components/sportIcons";
 import ActivityCard from "../components/ActivityCard";
 import { useAuth } from "../hooks/useAuth";
@@ -17,6 +24,116 @@ const getSportIcon = (sport: Activity["sport"]) => {
   };
   return sportIcons[sport] || <TennisIcon className="w-5 h-5" />;
 };
+
+// Carousel Component with Arrow Navigation
+function ActivityCarousel({
+  activities,
+  onJoin,
+  emptyMessage,
+  emptySubMessage,
+}: {
+  activities: Activity[];
+  onJoin: (activityId: string) => void;
+  emptyMessage: string;
+  emptySubMessage?: string;
+}) {
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  let scrollContainerRef: HTMLDivElement | null = null;
+
+  const updateScrollButtons = (container: HTMLDivElement) => {
+    const { scrollLeft, scrollWidth, clientWidth } = container;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1);
+  };
+
+  const scroll = (direction: "left" | "right") => {
+    if (!scrollContainerRef) return;
+
+    const cardWidth = 320; // w-80 = 320px
+    const gap = 16; // gap-4 = 16px
+    const scrollAmount = cardWidth + gap;
+
+    const newScrollLeft =
+      direction === "left"
+        ? scrollContainerRef.scrollLeft - scrollAmount
+        : scrollContainerRef.scrollLeft + scrollAmount;
+
+    scrollContainerRef.scrollTo({
+      left: newScrollLeft,
+      behavior: "smooth",
+    });
+  };
+
+  if (activities.length === 0) {
+    return (
+      <div className="text-center py-12 card-minimal border border-gray-200">
+        <div className="flex justify-center mb-4">
+          <HiUsers className="w-8 h-8 text-gray-300" />
+        </div>
+        <p className="text-gray-500 text-sm">{emptyMessage}</p>
+        {emptySubMessage && (
+          <p className="text-gray-400 text-xs mt-1">{emptySubMessage}</p>
+        )}
+      </div>
+    );
+  }
+
+  return (
+    <div className="relative">
+      {/* Left Arrow */}
+      {canScrollLeft && (
+        <div
+          className="absolute left-0 top-1/2 -translate-y-1/2 z-10"
+          style={{ transform: "translateY(-50%) translateX(-48px)" }}
+        >
+          <button
+            onClick={() => scroll("left")}
+            className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          >
+            <HiChevronLeft className="w-6 h-6" />
+          </button>
+        </div>
+      )}
+
+      {/* Right Arrow */}
+      {canScrollRight && (
+        <div
+          className="absolute right-0 top-1/2 -translate-y-1/2 z-10"
+          style={{ transform: "translateY(-50%) translateX(48px)" }}
+        >
+          <button
+            onClick={() => scroll("right")}
+            className="p-2 text-gray-400 hover:text-gray-600 transition-colors duration-200"
+          >
+            <HiChevronRight className="w-6 h-6" />
+          </button>
+        </div>
+      )}
+
+      {/* Carousel Container */}
+      <div
+        ref={(ref) => {
+          if (ref) {
+            scrollContainerRef = ref;
+            updateScrollButtons(ref);
+          }
+        }}
+        className="overflow-x-auto carousel-scroll"
+        onScroll={(e) => updateScrollButtons(e.currentTarget)}
+      >
+        <div className="flex gap-4 pb-2 px-1" style={{ width: "max-content" }}>
+          {activities.map((activity) => (
+            <div key={activity.id} className="flex-shrink-0 w-80">
+              <ActivityCard activity={activity} onJoin={onJoin} />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 // Calendar Week View Component - True calendar layout with day columns
 function PersonalOverview({
@@ -34,14 +151,21 @@ function PersonalOverview({
     activity: Activity & { userRole: "organizer" | "participant" }
   ) => void;
 }) {
-  // Generate next 7 days starting from today
+  // Generate current week from Monday to Sunday
   const generateWeekDays = () => {
     const days = [];
     const today = new Date();
 
+    // Get the Monday of this week
+    const dayOfWeek = today.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+    const daysFromMonday = dayOfWeek === 0 ? 6 : dayOfWeek - 1; // Adjust for Sunday being 0
+    const mondayOfThisWeek = new Date(today);
+    mondayOfThisWeek.setDate(today.getDate() - daysFromMonday);
+
+    // Generate 7 days starting from Monday
     for (let i = 0; i < 7; i++) {
-      const date = new Date(today);
-      date.setDate(today.getDate() + i);
+      const date = new Date(mondayOfThisWeek);
+      date.setDate(mondayOfThisWeek.getDate() + i);
       days.push(date);
     }
     return days;
@@ -77,14 +201,12 @@ function PersonalOverview({
   }, {} as Record<string, (Activity & { userRole: "organizer" | "participant" })[]>);
 
   const getDayLabel = (date: Date) => {
-    const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
-
-    if (date.toDateString() === today.toDateString()) return "Today";
-    if (date.toDateString() === tomorrow.toDateString()) return "Tomorrow";
-
     return date.toLocaleDateString("en-US", { weekday: "short" });
+  };
+
+  const isToday = (date: Date) => {
+    const today = new Date();
+    return date.toDateString() === today.toDateString();
   };
 
   const getDayNumber = (date: Date) => {
@@ -134,14 +256,35 @@ function PersonalOverview({
           const dayActivities = activitiesByDate[dayKey] || [];
 
           return (
-            <div key={index} className="flex flex-col">
+            <div
+              key={index}
+              className={`flex flex-col ${
+                index < weekDays.length - 1 ? "border-r border-gray-100" : ""
+              }`}
+            >
               {/* Day Header */}
-              <div className="text-center py-2 border-b border-gray-100">
-                <div className="text-xs font-medium text-gray-900">
-                  {getDayLabel(day)}
-                </div>
-                <div className="text-xs text-gray-500 mt-0.5">
-                  {getDayNumber(day)}
+              <div className="text-center py-2">
+                <div
+                  className={`inline-flex flex-col items-center justify-center ${
+                    isToday(day)
+                      ? "w-12 h-12 rounded-full bg-gray-100"
+                      : "w-12 h-12"
+                  }`}
+                >
+                  <div
+                    className={`text-xs font-medium ${
+                      isToday(day) ? "text-gray-900" : "text-gray-700"
+                    }`}
+                  >
+                    {getDayLabel(day)}
+                  </div>
+                  <div
+                    className={`text-xs ${
+                      isToday(day) ? "text-gray-700" : "text-gray-500"
+                    }`}
+                  >
+                    {getDayNumber(day)}
+                  </div>
                 </div>
               </div>
 
@@ -220,7 +363,9 @@ export default function DashboardPage() {
   // State for activity detail modal
   const [selectedActivity, setSelectedActivity] = useState<
     (Activity & { userRole: "organizer" | "participant" }) | null
-  >(null); // User's created activities (activities where user is the organizer)
+  >(null);
+
+  // User's created activities (activities where user is the organizer)
   const userCreatedActivities = mockActivities.filter(
     (activity) => activity.organizer === currentUserName
   );
@@ -245,7 +390,6 @@ export default function DashboardPage() {
       activity.organizer !== currentUserName &&
       !joinedActivityIds.includes(activity.id)
   );
-  const discoveryActivities = [...matesActivities, ...publicActivities];
 
   // Handler for joining activities
   const handleJoinActivity = (activityId: string) => {
@@ -293,49 +437,54 @@ export default function DashboardPage() {
         onViewAll={handleViewAllActivities}
         onActivityClick={handleActivityClick}
       />{" "}
-      {/* Discovery Feed Section */}
+      {/* Friends Activities - Primary Focus */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">
           <div>
             <h2 className="text-lg font-semibold text-gray-900">
-              Discover Activities
+              From Your Mates
             </h2>
             <p className="text-sm text-gray-500">
-              From your mates and nearby public activities
+              Activities organized by people you know
             </p>
           </div>
           <span className="text-sm text-gray-500">
-            {discoveryActivities.length} activities
+            {matesActivities.length} activities
           </span>
         </div>
 
-        {discoveryActivities.length > 0 ? (
-          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {discoveryActivities.map((activity) => (
-              <div key={activity.id} className="relative">
-                <ActivityCard activity={activity} onJoin={handleJoinActivity} />
-                {/* Add subtle indicator for mates activities */}
-                {activity.privacy === "MATES" && (
-                  <div className="absolute top-3 right-3">
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 border border-blue-200">
-                      mate
-                    </span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="text-center py-16 card-minimal border border-gray-200">
-            <div className="flex justify-center mb-4">
-              <HiMoon className="w-8 h-8 text-gray-300" />
-            </div>
-            <p className="text-gray-500 text-sm">
-              No activities to discover yet
-            </p>
-          </div>
-        )}
+        <ActivityCarousel
+          activities={matesActivities}
+          onJoin={handleJoinActivity}
+          emptyMessage="No activities from your mates yet"
+          emptySubMessage="Connect with more friends to see their activities"
+        />
       </div>
+      {/* Public Activities - Secondary Section */}
+      {publicActivities.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Public Activities
+              </h2>
+              <p className="text-sm text-gray-500">
+                Open activities from the community
+              </p>
+            </div>
+            <span className="text-sm text-gray-500">
+              {publicActivities.length} activities
+            </span>
+          </div>
+
+          <ActivityCarousel
+            activities={publicActivities}
+            onJoin={handleJoinActivity}
+            emptyMessage="No public activities available"
+            emptySubMessage="Check back later for community activities"
+          />
+        </div>
+      )}
       {/* Global Empty State */}
       {mockActivities.length === 0 && (
         <div className="text-center py-16 card-minimal border border-gray-200">
@@ -436,16 +585,16 @@ export default function DashboardPage() {
             <div className="flex space-x-3 mt-6">
               <button
                 onClick={() => setSelectedActivity(null)}
-                className="flex-1 px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50"
+                className="flex-1 px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50 cursor-pointer"
               >
                 Close
               </button>
               {selectedActivity.userRole === "organizer" ? (
-                <button className="flex-1 px-4 py-2 text-sm bg-gray-900 text-white rounded hover:bg-gray-800">
+                <button className="flex-1 px-4 py-2 text-sm bg-gray-900 text-white rounded hover:bg-gray-800 cursor-pointer">
                   Manage
                 </button>
               ) : (
-                <button className="flex-1 px-4 py-2 text-sm bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100">
+                <button className="flex-1 px-4 py-2 text-sm bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 cursor-pointer">
                   Leave
                 </button>
               )}
