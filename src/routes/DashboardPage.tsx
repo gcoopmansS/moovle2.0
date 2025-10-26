@@ -5,7 +5,6 @@ import type { Activity } from "../domain/types";
 import {
   HiPuzzlePiece,
   HiPlus,
-  HiCalendarDays,
   HiUsers,
   HiChevronLeft,
   HiChevronRight,
@@ -14,9 +13,11 @@ import { TennisIcon, PadelIcon } from "../components/sportIcons";
 import ActivityCard from "../components/ActivityCard";
 import { useAuth } from "../hooks/useAuth";
 import { CreateActivityModal } from "../components/CreateActivityModal";
+import { ActivityDetailsModal } from "../components/ActivityDetailsModal";
 
 // Helper functions
 
+// Returns the correct sport icon for a given sport string
 const getSportIcon = (sport: Activity["sport"]) => {
   const sportIcons = {
     tennis: <TennisIcon className="w-5 h-5" />,
@@ -215,9 +216,9 @@ function PersonalOverview({
 
   const getActivityTime = (isoString: string) => {
     return new Date(isoString).toLocaleTimeString("en-US", {
-      hour: "numeric",
+      hour: "2-digit",
       minute: "2-digit",
-      hour12: true,
+      hour12: false,
     });
   };
 
@@ -506,102 +507,19 @@ export default function DashboardPage() {
         </div>
       )}
       {/* Activity Detail Modal */}
-      {selectedActivity && (
-        <div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50"
-          onClick={() => setSelectedActivity(null)}
-        >
-          <div
-            className="bg-white rounded-lg p-6 max-w-md w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  {getSportIcon(selectedActivity.sport)}
-                </div>
-                <h3 className="text-lg font-semibold text-gray-900">
-                  {selectedActivity.title}
-                </h3>
-              </div>
-              <span
-                className={`px-2 py-1 text-xs font-medium rounded ${
-                  selectedActivity.userRole === "organizer"
-                    ? "bg-gray-100 text-gray-700"
-                    : "bg-green-100 text-green-700"
-                }`}
-              >
-                {selectedActivity.userRole === "organizer"
-                  ? "Organizer"
-                  : "Joined"}
-              </span>
-            </div>
-
-            <div className="space-y-3 text-sm text-gray-600">
-              <div className="flex items-center space-x-2">
-                <HiCalendarDays className="w-4 h-4" />
-                <span>
-                  {new Date(selectedActivity.startTime).toLocaleDateString(
-                    "en-US",
-                    {
-                      weekday: "long",
-                      month: "long",
-                      day: "numeric",
-                    }
-                  )}{" "}
-                  at{" "}
-                  {new Date(selectedActivity.startTime).toLocaleTimeString(
-                    "en-US",
-                    {
-                      hour: "numeric",
-                      minute: "2-digit",
-                      hour12: true,
-                    }
-                  )}
-                </span>
-              </div>
-
-              <div>
-                <strong>Location:</strong> {selectedActivity.location}
-              </div>
-
-              <div>
-                <strong>Duration:</strong> {selectedActivity.durationMinutes}{" "}
-                minutes
-              </div>
-
-              <div>
-                <strong>Capacity:</strong>{" "}
-                {selectedActivity.capacity - selectedActivity.spotsLeft}/
-                {selectedActivity.capacity} joined
-                {selectedActivity.spotsLeft > 0 && (
-                  <span className="text-green-600 ml-2">
-                    ({selectedActivity.spotsLeft} spots left)
-                  </span>
-                )}
-              </div>
-            </div>
-
-            <div className="flex space-x-3 mt-6">
-              <button
-                onClick={() => setSelectedActivity(null)}
-                className="flex-1 px-4 py-2 text-sm text-gray-600 border border-gray-300 rounded hover:bg-gray-50 cursor-pointer"
-              >
-                Close
-              </button>
-              {selectedActivity.userRole === "organizer" ? (
-                <button className="flex-1 px-4 py-2 text-sm bg-gray-900 text-white rounded hover:bg-gray-800 cursor-pointer">
-                  Manage
-                </button>
-              ) : (
-                <button className="flex-1 px-4 py-2 text-sm bg-red-50 text-red-600 border border-red-200 rounded hover:bg-red-100 cursor-pointer">
-                  Leave
-                </button>
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <ActivityDetailsModal
+        activity={selectedActivity!}
+        isOpen={!!selectedActivity}
+        onClose={() => setSelectedActivity(null)}
+        onLeave={() => {
+          // Optionally implement leave logic here
+          setSelectedActivity(null);
+        }}
+        onManage={() => {
+          // Optionally implement manage logic here
+          setSelectedActivity(null);
+        }}
+      />
       {/* Create Activity Modal */}
       <CreateActivityModal
         isOpen={isCreateModalOpen}

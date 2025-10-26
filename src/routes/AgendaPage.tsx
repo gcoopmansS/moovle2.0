@@ -7,11 +7,19 @@ import {
 } from "react-icons/hi2";
 import { mockActivities } from "../data/mockActivities";
 import ActivityCard from "../components/ActivityCard";
+import type { Activity } from "../domain/types";
+import { ActivityDetailsModal } from "../components/ActivityDetailsModal";
 
 export default function AgendaPage() {
   // State for joined activities (should match dashboard)
   const [joinedActivityIds] = useState<string[]>(["2", "3"]);
   const [viewMode, setViewMode] = useState<"list" | "calendar">("calendar");
+  // Add week offset state
+  const [weekOffset, setWeekOffset] = useState(0);
+  // State for activity detail modal
+  const [selectedActivity, setSelectedActivity] = useState<
+    (Activity & { userRole?: "organizer" | "participant" }) | null
+  >(null);
 
   // Mock current user name (should match dashboard)
   const currentUserName = "Gil Coopmans";
@@ -71,14 +79,13 @@ export default function AgendaPage() {
       });
   };
 
-  // Get current week dates (Monday to Sunday)
-  const getCurrentWeekDates = () => {
+  // Get week dates (Monday to Sunday) for a given offset
+  const getWeekDates = (offset: number) => {
     const today = new Date();
     const currentDay = today.getDay(); // 0 = Sunday, 1 = Monday, etc.
     const diff = currentDay === 0 ? -6 : 1 - currentDay; // Adjust for Monday start
     const monday = new Date(today);
-    monday.setDate(today.getDate() + diff);
-
+    monday.setDate(today.getDate() + diff + offset * 7);
     const weekDates = [];
     for (let i = 0; i < 7; i++) {
       const date = new Date(monday);
@@ -88,7 +95,7 @@ export default function AgendaPage() {
     return weekDates;
   };
 
-  const weekDates = getCurrentWeekDates();
+  const weekDates = getWeekDates(weekOffset);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const handleJoinActivity = (activityId: string) => {
@@ -108,7 +115,7 @@ export default function AgendaPage() {
         <div className="flex items-center space-x-1 bg-gray-100 p-1 rounded-lg w-fit">
           <button
             onClick={() => setViewMode("calendar")}
-            className={`flex items-center space-x-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            className={`flex items-center space-x-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
               viewMode === "calendar"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
@@ -119,7 +126,7 @@ export default function AgendaPage() {
           </button>
           <button
             onClick={() => setViewMode("list")}
-            className={`flex items-center space-x-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            className={`flex items-center space-x-2 px-3 py-1.5 text-sm font-medium rounded-md transition-colors cursor-pointer ${
               viewMode === "list"
                 ? "bg-white text-gray-900 shadow-sm"
                 : "text-gray-600 hover:text-gray-900"
@@ -213,24 +220,48 @@ export default function AgendaPage() {
       ) : (
         /* Calendar View */
         <div className="space-y-6">
-          {/* Calendar Header */}
+          {/* Calendar Header with week navigation */}
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-semibold text-gray-900">
-              Week of{" "}
-              {weekDates[0].toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-              })}{" "}
-              -{" "}
-              {weekDates[6].toLocaleDateString("en-US", {
-                month: "long",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </h2>
+            <div className="flex items-center gap-2">
+              <button
+                className="px-2 py-1 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
+                onClick={() => setWeekOffset((w) => w - 1)}
+                aria-label="Previous week"
+              >
+                {"<"}
+              </button>
+              <h2 className="text-lg font-semibold text-gray-900">
+                Week of{" "}
+                {weekDates[0].toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                })}
+                {" - "}
+                {weekDates[6].toLocaleDateString("en-US", {
+                  month: "long",
+                  day: "numeric",
+                  year: "numeric",
+                })}
+              </h2>
+              <button
+                className="px-2 py-1 rounded hover:bg-gray-100 text-gray-600 cursor-pointer"
+                onClick={() => setWeekOffset((w) => w + 1)}
+                aria-label="Next week"
+              >
+                {">"}
+              </button>
+              {weekOffset !== 0 && (
+                <button
+                  className="ml-2 px-3 py-1 rounded bg-gray-100 text-gray-700 hover:bg-gray-200 text-sm font-medium transition-colors cursor-pointer"
+                  onClick={() => setWeekOffset(0)}
+                >
+                  Today
+                </button>
+              )}
+            </div>
             <div className="flex items-center gap-2 text-sm text-gray-500">
               <span className="flex items-center gap-1">
-                <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
                 Your Activities
               </span>
             </div>
@@ -250,7 +281,7 @@ export default function AgendaPage() {
                       key={day}
                       className={`text-center py-3 text-sm font-medium border-b ${
                         isToday
-                          ? "text-blue-600 bg-blue-50 border-blue-200"
+                          ? "text-gray-900 bg-gray-100 border-gray-300"
                           : "text-gray-700 border-gray-200"
                       }`}
                     >
@@ -273,13 +304,13 @@ export default function AgendaPage() {
                     key={date.toISOString()}
                     className={`p-3 ${
                       isToday
-                        ? "bg-blue-50 border-r border-blue-200"
-                        : "bg-gray-50 border-r border-gray-200"
+                        ? "bg-gray-50 border-r border-gray-200"
+                        : "bg-white border-r border-gray-100"
                     } ${isLastDay ? "border-r-0" : ""}`}
                   >
                     <div
                       className={`text-sm font-medium mb-2 ${
-                        isToday ? "text-blue-900" : "text-gray-900"
+                        isToday ? "text-gray-900" : "text-gray-700"
                       }`}
                     >
                       {date.getDate()}
@@ -293,29 +324,48 @@ export default function AgendaPage() {
                           hour12: false,
                         });
                         const isPast = activityDate <= now;
-
+                        const isOrganizer =
+                          activity.organizer === currentUserName;
                         return (
                           <div
                             key={activity.id}
                             className={`text-xs px-2 py-1 rounded border-l-2 cursor-pointer hover:opacity-80 transition-opacity ${
                               isPast
                                 ? "bg-gray-100 text-gray-600 border-gray-400 opacity-75"
+                                : isOrganizer
+                                ? isToday
+                                  ? "bg-gray-200 text-gray-900 border-gray-600 font-medium"
+                                  : "bg-gray-100 text-gray-800 border-gray-500"
                                 : isToday
-                                ? "bg-blue-200 text-blue-900 border-blue-600 font-medium"
-                                : "bg-blue-100 text-blue-800 border-blue-500"
+                                ? "bg-green-200 text-green-900 border-green-600 font-medium"
+                                : "bg-green-100 text-green-800 border-green-500"
                             }`}
                             title={`${activity.title} at ${
                               activity.location || "TBD"
-                            }${isPast ? " (Completed)" : ""}`}
+                            }${isPast ? " (Completed)" : ""}${
+                              isOrganizer ? " (Organizer)" : " (Joined)"
+                            }`}
+                            onClick={() =>
+                              setSelectedActivity({
+                                ...(activity as Activity),
+                                userRole: isOrganizer
+                                  ? "organizer"
+                                  : "participant",
+                              })
+                            }
                           >
                             {activity.title}
                             <div
                               className={
                                 isPast
                                   ? "text-gray-500"
+                                  : isOrganizer
+                                  ? isToday
+                                    ? "text-gray-700"
+                                    : "text-gray-600"
                                   : isToday
-                                  ? "text-blue-700"
-                                  : "text-blue-600"
+                                  ? "text-green-700"
+                                  : "text-green-600"
                               }
                             >
                               {time}
@@ -329,37 +379,14 @@ export default function AgendaPage() {
               })}
             </div>
           </div>
-
-          {/* Calendar Legend/Summary */}
-          <div className="flex items-center justify-between text-sm text-gray-600">
-            <div className="flex items-center gap-4">
-              <span>
-                Total activities this week: {upcomingActivities.length}
-              </span>
-              {upcomingActivities.length > 0 && (
-                <>
-                  <span>•</span>
-                  <span>
-                    Next activity: {upcomingActivities[0].title} (
-                    {new Date(
-                      upcomingActivities[0].startTime
-                    ).toLocaleDateString("en-US", {
-                      weekday: "short",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                    )
-                  </span>
-                </>
-              )}
-            </div>
-            <button
-              onClick={() => setViewMode("list")}
-              className="text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View as list →
-            </button>
-          </div>
+          {/* Activity Details Modal */}
+          <ActivityDetailsModal
+            activity={selectedActivity!}
+            isOpen={!!selectedActivity}
+            onClose={() => setSelectedActivity(null)}
+            onLeave={() => setSelectedActivity(null)}
+            onManage={() => setSelectedActivity(null)}
+          />
         </div>
       )}
     </div>
